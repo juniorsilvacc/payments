@@ -37,3 +37,14 @@ class MercadoPago():
     
     def __create_payment(self, payment_payload: dict) -> dict:
         return self.__post('/v1/payments', payment_payload)
+    
+    def pay_with_card(self, card_data: dict, amount: float, description: str, payer: dict, installments: int) -> dict:
+        token = self.__get_card_token(card_data)
+        payload = {
+            'token': token,
+            'transaction_amount': amount,
+            'description': description,
+            'payer': payer,
+            'installments': int(installments),
+        }
+        return self.__create_payment(payload)
