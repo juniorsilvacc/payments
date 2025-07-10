@@ -30,3 +30,10 @@ class MercadoPago():
                 error = response.text
             raise RuntimeError(f'Erro MP {response.status_code}: {error}')
         return response.json()
+    
+    def __get_card_token(self, card_data: dict) -> str:
+        response = self.__post('/v1/card_tokens', card_data)
+        return response.get('id')
+    
+    def __create_payment(self, payment_payload: dict) -> dict:
+        return self.__post('/v1/payments', payment_payload)
