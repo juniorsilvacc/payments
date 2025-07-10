@@ -48,3 +48,12 @@ class MercadoPago():
             'installments': int(installments),
         }
         return self.__create_payment(payload)
+
+    def pay_with_pix(self, amount: float, description: str, payer: dict, payment_method_id: str = 'pix') -> dict:
+        payload = {
+            'transaction_amount': amount,
+            'description': description,
+            'payer': payer,
+            'payment_method_id': payment_method_id,
+        }
+        return self.__create_payment(payload)
