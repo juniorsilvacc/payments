@@ -57,3 +57,12 @@ class MercadoPago():
             'payment_method_id': payment_method_id,
         }
         return self.__create_payment(payload)
+
+    def pay_with_boleto(self, amount: float, description: str, payer: dict, payment_method_id: str = 'bolbradesco') -> dict:
+        payload = {
+            'transaction_amount': amount,
+            'description': description,
+            'payer': payer,
+            'payment_method_id': payment_method_id,
+        }
+        return self.__create_payment(payload)
