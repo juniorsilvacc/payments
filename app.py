@@ -2,6 +2,8 @@ from fastapi import FastAPI, Request, HTTPException
 from fastapi.responses import JSONResponse, HTMLResponse
 from fastapi.templating import Jinja2Templates
 from services.mercado_pago import MercadoPago
+import logging
+
 
 app = FastAPI()
 mp = MercadoPago()
@@ -21,7 +23,7 @@ async def checkout_page(request: Request):
 async def create_payment(request: Request):
     data = await request.json()
     method = data.get('payment_method')
-    amount = float(data.get('transaction_amount'), 0)
+    amount = float(data.get('transaction_amount', 0))
     description = data.get('description')
     
     try:
@@ -43,7 +45,7 @@ async def create_payment(request: Request):
                 'email': data.get('email'),
                 'identification': {
                     'type': 'CPF',
-                    'number': data.get('identification_number')
+                    'number': data.get('identification_number'),
                 },
             }
             installments = data.get('installments')
@@ -60,10 +62,10 @@ async def create_payment(request: Request):
                 'email': data.get('email'),
                 'identification': {
                     'type': 'CPF',
-                    'number': data.get('identification_number')
+                    'number': data.get('identification_number'),
                 },
             }
-            
+
             result = mp.pay_with_pix(
                 amount=amount,
                 description=description,
@@ -76,7 +78,7 @@ async def create_payment(request: Request):
                 'email': data.get('email'),
                 'identification': {
                     'type': 'CPF',
-                    'number': data.get('identification_number')
+                    'number': data.get('identification_number'),
                 },
                 'address': {
                     'zip_code': data.get('zip_code'),
@@ -95,6 +97,13 @@ async def create_payment(request: Request):
             )
         else:
             raise HTTPException(status_code=400, detail='Método de pagamento inválido')
+    
         return JSONResponse(result)
+
     except RuntimeError as err:
-        raise HTTPException(status_code=502, detail=(err))
+        logging.error(f"Erro MercadoPago: {err}")
+
+        raise HTTPException(
+            status_code=502,
+            detail="Ocorreu um erro ao processar o pagamento. Verifique os dados e tente novamente."
+        )

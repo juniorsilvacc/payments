@@ -26,7 +26,7 @@ class MercadoPago():
         except requests.HTTPError:
             try:
                 error = response.json()
-            except:
+            except ValueError:
                 error = response.text
             raise RuntimeError(f'Erro MP {response.status_code}: {error}')
         return response.json()
