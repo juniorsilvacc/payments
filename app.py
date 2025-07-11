@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.responses import JSONResponse, HTMLResponse
 from fastapi.templating import Jinja2Templates
-from .services import MercadoPago
+from services.mercado_pago import MercadoPago
 
 app = FastAPI()
 mp = MercadoPago()
