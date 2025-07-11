@@ -2,6 +2,7 @@ import uuid
 import requests
 from decouple import config
 
+
 class MercadoPago():
     
     BASE_URL = config('MP_BASE_API_URL')
@@ -38,30 +39,28 @@ class MercadoPago():
     def __create_payment(self, payment_payload: dict) -> dict:
         return self.__post('/v1/payments', payment_payload)
     
-    def pay_with_card(self, card_data: dict, amount: float, description: str, payer: dict, installments: int) -> dict:
+    def pay_with_card(self, amount: float, installments: int, description: str, card_data: dict, payer: dict) -> dict:
         token = self.__get_card_token(card_data)
         payload = {
-            'token': token,
             'transaction_amount': amount,
+            'token': token,
             'description': description,
-            'payer': payer,
             'installments': int(installments),
+            'payer': payer,
         }
         return self.__create_payment(payload)
 
-    def pay_with_pix(self, amount: float, description: str, payer: dict, payment_method_id: str = 'pix') -> dict:
+    def pay_with_pix(self, amount: float, payer: dict, payment_method_id: str = 'pix') -> dict:
         payload = {
             'transaction_amount': amount,
-            'description': description,
             'payer': payer,
             'payment_method_id': payment_method_id,
         }
         return self.__create_payment(payload)
 
-    def pay_with_boleto(self, amount: float, description: str, payer: dict, payment_method_id: str = 'bolbradesco') -> dict:
+    def pay_with_boleto(self, amount: float, payer: dict, payment_method_id: str = 'bolbradesco') -> dict:
         payload = {
             'transaction_amount': amount,
-            'description': description,
             'payer': payer,
             'payment_method_id': payment_method_id,
         }

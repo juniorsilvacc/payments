@@ -24,7 +24,7 @@ async def create_payment(request: Request):
     data = await request.json()
     method = data.get('payment_method')
     amount = float(data.get('transaction_amount', 0))
-    description = data.get('description')
+    description = data.get('description') or 'Pagamento com Cartão'
     
     try:
         if method == 'card':
@@ -68,7 +68,6 @@ async def create_payment(request: Request):
 
             result = mp.pay_with_pix(
                 amount=amount,
-                description=description,
                 payer=payer,
             )
         elif method == 'boleto':
@@ -92,7 +91,6 @@ async def create_payment(request: Request):
             
             result = mp.pay_with_boleto(
                 amount=amount,
-                description=description,
                 payer=payer,
             )
         else:
