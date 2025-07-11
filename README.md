@@ -37,7 +37,7 @@ Este projeto é uma aplicação de checkout simples e funcional desenvolvida com
 - Conta de desenvolvedor no Mercado Pago
 - Chaves de acesso (Access Token, Public Key)
 
-## 🧪 Como usar
+## ⚙️ Como utilizar
 ```bash
 Clone o repositório:
 git clone https://github.com/juniorsilvacc/payments.git
